@@ -194,6 +194,6 @@ sensors_event_t ac1, g1, temp;
 
     // Send message via ESP-NOW
     esp_now_send(broadcastAddress, (uint8_t *) &myData, sizeof(myData));
-    delay(2000);
+    delay(1000);
   
   }
