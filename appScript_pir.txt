@@ -1,0 +1,23 @@
+var sheet_id = "1FBpAAsh18vVaGNJJ4KGqAdRc5WzhbZjhuKoafUjH3Ak"; // Replace with your spreadsheet ID
+var sheet_name = "datalogging"; // Change this to the name of your sheet
+
+function doGet(e){
+  var params = e.parameter;
+  var dateTime = new Date();
+  
+  // Open the spreadsheet and select the sheet
+  var ss = SpreadsheetApp.openById(sheet_id);
+  var sheet = ss.getSheetByName(sheet_name);
+  
+  // Check if the sheet exists, create a new one if it doesn't
+  if (!sheet) {
+    sheet = ss.insertSheet(sheet_name);
+    // Add headers
+    sheet.appendRow(["Date/Time", "Sensor ID", "Sensor Status"]);
+  }
+  
+  // Append the data to the sheet
+  sheet.appendRow([dateTime, params.sensorId, params.sensorStatus]);
+  
+  return ContentService.createTextOutput("Data received and stored successfully.");
+}
