@@ -1,3 +1,4 @@
+
 #include <esp_now.h>
 #include <WiFi.h>
 #include <HTTPClient.h>
@@ -7,7 +8,7 @@ const char* ssid = "HONOR Pad 5";
 const char* password = "debodola1234";
 
 // Replace with your Google Script ID
-String GOOGLE_SCRIPT_ID = "AKfycbwGQLYjnrDj7_DzoehJuk3xm9pX6UnmbcV8QpoOwaCo1tqwl6kgwQvZUBihRyFYDaE";
+const String GOOGLE_SCRIPT_ID = "AKfycbxudMWgLrEFzEf6Ao_SO2HKeWXQh_0q2ehlMoBZZKS6GREPIpHBCnVJPz_d7IRFEu_7";
 
 // Structure example to receive data
 // Must match the sender structure
@@ -20,26 +21,24 @@ typedef struct struct_message {
 // Create a struct_message called myData
 struct_message myData;
 
-// Initialize a secure client object
-WiFiClientSecure client;
+// Initialize a client object
+WiFiClient client;
 
 // Function to send data to Google Sheets
 void sendData(bool bValue, int dValue) {
    HTTPClient http;
 
    // Construct the URL with parameters
-   String url = "https://script.google.com/macros/s/" + GOOGLE_SCRIPT_ID + "/exec";
-   
-   // Set the parameters in the request body
-   String requestBody = "sensorId=" + String(bValue) + "&sensorStatus=" + String(dValue);
+   String url = "http://script.google.com/macros/s/" + GOOGLE_SCRIPT_ID + "/exec?";
+   url += "sensorId=" + String(bValue);
+   url += "&sensorStatus=" + String(dValue);
 
    // Make the HTTP request
    Serial.print("Sending data to Google Sheets: ");
    Serial.println(url);
-   http.begin(client, url); // Specify the client and URL
-   http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+   http.begin(url); // Specify the URL
 
-   int httpCode = http.POST(requestBody); // Use POST method with request body
+   int httpCode = http.GET();
    if (httpCode > 0) {
      Serial.print("HTTP Response Code: ");
      Serial.println(httpCode);
@@ -104,6 +103,3 @@ void loop() {
   // Your additional code or tasks can go here
   delay(1000); // Add a delay to avoid excessive looping
 }
-
-
-
