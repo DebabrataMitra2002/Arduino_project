@@ -3,7 +3,7 @@
 #include <WiFi.h>
 #include <esp_wifi.h>
 const int PIR_SENSOR_OUTPUT_PIN = 13;  /* PIR sensor O/P pin */
-int warm_up;
+ int warm_up;
 int id=1;
 // REPLACE WITH YOUR RECEIVER MAC Address
 uint8_t broadcastAddress[] = {0xC8, 0xF0, 0x9E, 0xA2, 0x97, 0x50};
@@ -45,9 +45,8 @@ void setup() {
   // Init Serial Monitor
   Serial.begin(115200);
   pinMode(PIR_SENSOR_OUTPUT_PIN, INPUT);
-  Serial.begin(115200); /* Define baud rate for serial communication */
-  Serial.println("Waiting For Power On Warm Up");
-  delay(20000); /* Power On Warm Up Delay */
+  // Serial.println("Waiting For Power On Warm Up");
+  // delay(2000); /* Power On Warm Up Delay */
   Serial.println("Ready!");
   // Set device as a Wi-Fi Station
   WiFi.mode(WIFI_STA);
@@ -94,12 +93,12 @@ void loop() {
      {
       Serial.print("Warming Up\n\n");
       warm_up = 0;
-      delay(2000);
+      // delay(1000);
     }
     Serial.print("No object in sight\n\n");
     myData.b=false;
     myData.d=id;
-    delay(1000);
+    // delay(1000);
   }
   else
   {
@@ -107,7 +106,7 @@ void loop() {
      myData.b=true;
     myData.d=id;
     warm_up = 1;
-    delay(1000);
+    // delay(1000);
   } 
   // Send message via ESP-NOW
   esp_err_t result = esp_now_send(broadcastAddress, (uint8_t *) &myData, sizeof(myData));
@@ -118,5 +117,5 @@ void loop() {
   else {
     Serial.println("Error sending the data");
   }
-  delay(2000);
+  delay(1000);
 }

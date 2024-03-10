@@ -58,10 +58,11 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
   memcpy(&myData, incomingData, sizeof(myData));
 
   // Print received data
-  Serial.print("Received Data - b: ");
+  Serial.print("SensorId: ");
+  Serial.print(myData.d);
+  Serial.print("SensorStatus: ");
   Serial.println(myData.b);
-  Serial.print("Received Data - d: ");
-  Serial.println(myData.d);
+  
 
   // Send the received data to Google Sheets
   // sendData(myData.b, myData.d);
@@ -85,7 +86,9 @@ void setup() {
   // Initialize Serial Monitor
   Serial.begin(115200);
   while (!Serial); // Wait for Serial Monitor to open
-  connectWiFi();
+  
+    connectWiFi();
+
   // Set the device as a Station and Soft Access Point simultaneously
   // WiFi.mode(WIFI_AP_STA);
   // WiFi.mode(WIFI_STA);
@@ -115,9 +118,11 @@ void setup() {
   
  
 void loop() {
-  if(WiFi.status() != WL_CONNECTED) { 
-    connectWiFi();
-  }
+//  {if(WiFi.status() != WL_CONNECTED) { 
+//     connectWiFi();
+//   } 
+if(myData.b==1)
+{
   Serial.println("Initialization complete");
   String postData = "SensorId=" + String(myData.d) + "&SensorStatus=" + String(myData.b); 
 
@@ -133,6 +138,8 @@ void loop() {
   Serial.print("httpCode: "); Serial.println(httpCode); 
   Serial.print("payload : "); Serial.println(payload); 
   Serial.println("--------------------------------------------------");
+  } 
+  delay(2000);
 }
  
  // Your additional code or tasks can go here
