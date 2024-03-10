@@ -1,15 +1,8 @@
 /*************************************************************************************************
- *  Created By: Tauseef Ahmad
- *  Created On: 3 April, 2023
- *  
- *  YouTube Video: https://youtu.be/VEN5kgjEuh8
- *  My Channel: https://www.youtube.com/channel/UCOXYfOHgu-C-UfGyDcu5sYw/
- *  
- *  *********************************************************************************************
- *  Preferences--> Aditional boards Manager URLs : 
- *  For ESP32 (2.0.3):
- *  https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
- ***********************************************************************************************/
+ *  Created By: Debabrata Mitra
+ *  Created On: 10 march, 2024
+
+**/
  
 #include <WiFi.h> 
 #include <HTTPClient.h> 
