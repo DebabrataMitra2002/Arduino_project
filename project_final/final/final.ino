@@ -3,9 +3,11 @@
 #include <HTTPClient.h>
 
 const int PIR_SENSOR_OUTPUT_PIN = 13;  /* PIR sensor O/P pin */
- int warm_up;
+int warm_up;
 int d=4;
-bool b=1;
+bool b=1,c=0;
+int count1=0;
+int count2=0;
 const char* ssid = "HONOR Pad 5";
 const char* password = "debodola1234";
 String URL = "http://192.168.43.27/pir_project/data_log.php";
@@ -54,14 +56,16 @@ void connectWiFi() {
 }
 
 void setup() {
-  Serial.begin(115200);
-    // Init Serial Monitor
   pinMode(PIR_SENSOR_OUTPUT_PIN, INPUT);
+  Serial.begin(115200); /* Define baud rate for serial communication */
+  Serial.println("Waiting For Power On Warm Up");
+  delay(20000); /* Power On Warm Up Delay */
+  Serial.println("Ready!");
   connectWiFi();
 }
 
 void loop() {
-  int sensor_output;
+   int sensor_output;
   sensor_output = digitalRead(PIR_SENSOR_OUTPUT_PIN);
   if( sensor_output == LOW )
   {
@@ -69,14 +73,32 @@ void loop() {
      {
       Serial.print("Warming Up\n\n");
       warm_up = 0;
-      // delay(1000);
-    }
+      delay(2000);
+     }
+  count2++;  
+  if(count2==1)
+  {
+    HTTPClient http; 
+    http.begin(URL);
+    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+    
+    String postData = "SensorId=" + String(d) + "&SensorStatus=" + String(c); 
+    int httpCode = http.POST(postData); 
+    String payload = http.getString(); 
+    
+    Serial.print("URL : "); Serial.println(URL); 
+    Serial.print("Data: "); Serial.println(postData); 
+    Serial.print("httpCode: "); Serial.println(httpCode); 
+    Serial.print("payload : "); Serial.println(payload); 
+    Serial.println("--------------------------------------------------");
     Serial.print("No object in sight\n\n");
-    // b=false;
-    // d=id;
-    // delay(1000);
+    }
+    count1=0;
+    delay(1000);
   }
   else
+  {count1++; 
+  if(count1==1)
   {
     HTTPClient http; 
     http.begin(URL);
@@ -91,7 +113,10 @@ void loop() {
     Serial.print("httpCode: "); Serial.println(httpCode); 
     Serial.print("payload : "); Serial.println(payload); 
     Serial.println("--------------------------------------------------");
+    Serial.print("Object detected\n\n"); 
+    warm_up = 1;
+    delay(1000);
+    }
+   count2=0;
   }
-  
-  delay(1000);
 }
