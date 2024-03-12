@@ -59,7 +59,7 @@ void setup() {
   pinMode(PIR_SENSOR_OUTPUT_PIN, INPUT);
   Serial.begin(115200); /* Define baud rate for serial communication */
   Serial.println("Waiting For Power On Warm Up");
-  delay(20000); /* Power On Warm Up Delay */
+  delay(3000); /* Power On Warm Up Delay */
   Serial.println("Ready!");
   connectWiFi();
 }
@@ -73,7 +73,7 @@ void loop() {
      {
       Serial.print("Warming Up\n\n");
       warm_up = 0;
-      delay(2000);
+      delay(500);
      }
   count2++;  
   if(count2==1)
